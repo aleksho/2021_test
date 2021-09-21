@@ -1,25 +1,35 @@
+import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-drv = webdriver.Chrome(executable_path='F:\\python\\chromedriver_win32\\chromedriver.exe')
-url = 'http://www.google.com'
-drv.get(url)
-assert 'Google' in drv.title
-elm = drv.find_element_by_name('q')
-elm.send_keys('selenide')
-elm.send_keys(Keys.RETURN)
+class Search(unittest.TestCase):
 
-link01 = drv.find_element_by_xpath('//div/cite')
-assert "selenide.org" in link01.text.lower()
+    def setUp(self):
+        self.drv = webdriver.Chrome(executable_path='F:\\python\\chromedriver_win32\\chromedriver.exe')
+        self.url = 'http://www.google.com'
+        self.drv.get(self.url)
 
-drv.find_element_by_xpath('//*[@class="hdtb-mitem"][2]/a[@href]').click()
+    def test_search(self):
+        assert 'Google' in self.drv.title
+        self.elm = self.drv.find_element_by_name('q')
+        self.elm.send_keys('selenide')
+        self.elm.send_keys(Keys.RETURN)
 
-link02 = drv.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[2]')
-assert "selenide.org" in link02.text.lower()
+        link01 = self.drv.find_element_by_xpath('//div/cite')
+        assert "selenide.org" in link01.text.lower()
 
-drv.find_element_by_xpath('//*[@jsname ="ONH4Gc"]').click()
+        self.drv.find_element_by_xpath('//*[@class="hdtb-mitem"][2]/a[@href]').click()
 
-link04 = drv.find_element_by_xpath('//div/cite')
-assert "selenide.org" in link04.text.lower()
+        link02 = self.drv.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[2]')
+        assert "selenide.org" in link02.text.lower()
 
-print('Done')
+        self.drv.find_element_by_xpath('//*[@jsname ="ONH4Gc"]').click()
+
+        link04 = self.drv.find_element_by_xpath('//div/cite')
+        assert "selenide.org" in link04.text.lower()
+
+    def tearDown(self):
+        self.drv.close()
+
+if __name__ == '__main__':
+    unittest.main()
